@@ -38,6 +38,19 @@ const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const N = () => G.players.length;
 const rankLabel = (r) =>
   r === 14 ? "A" : r === 13 ? "K" : r === 12 ? "Q" : r === 11 ? "J" : String(r);
+
+// AI 思考延时（按动作差异化，让节奏更像真人；单位毫秒）
+function aiThinkDelay(action) {
+  const r = (lo, hi) => lo + Math.random() * (hi - lo);
+  switch (action) {
+    case "check": return r(900, 2000);
+    case "call": return r(1100, 2300);
+    case "fold": return r(900, 1900);
+    case "raise": return r(1600, 3100);
+    case "allin": return r(1800, 3300);
+    default: return r(1000, 2200);
+  }
+}
 const potTotal = () => G.players.reduce((s, p) => s + p.totalBet, 0);
 const activePlayers = () => G.players.filter((p) => !p.folded);
 const roundTo = (v, step) => Math.round(v / step) * step;
@@ -259,11 +272,11 @@ function continueAction() {
     showHumanControls();
   } else {
     G.busy = true;
+    const d = aiDecide(p);
     setTimeout(() => {
       G.busy = false;
-      const d = aiDecide(p);
       actAndAdvance(next, d.action, d.amount);
-    }, 650 + Math.random() * 900);
+    }, aiThinkDelay(d.action));
   }
 }
 
@@ -354,7 +367,7 @@ function startStreet() {
   const start = n === 2 ? (G.dealer + 1) % n : (G.dealer + 1) % n;
   G.searchStart = start;
   render();
-  setTimeout(continueAction, 520);
+  setTimeout(continueAction, 900);
 }
 
 /* ============================================================
@@ -418,7 +431,7 @@ function startHand() {
   else start = (G.dealer + 3) % n; // 大盲后一位 (UTG)
   G.searchStart = start;
   render();
-  setTimeout(continueAction, 500);
+  setTimeout(continueAction, 750);
 }
 
 function postBlinds() {

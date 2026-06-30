@@ -16,6 +16,19 @@ const roundTo = (v, step) => Math.round(v / step) * step;
 const rankLabel = (r) =>
   r === 14 ? "A" : r === 13 ? "K" : r === 12 ? "Q" : r === 11 ? "J" : String(r);
 
+// AI 思考延时（按动作差异化，让节奏更像真人；单位毫秒）
+function aiThinkDelay(action) {
+  const r = (lo, hi) => lo + Math.random() * (hi - lo);
+  switch (action) {
+    case "check": return r(900, 2000);
+    case "call": return r(1100, 2300);
+    case "fold": return r(900, 1900);
+    case "raise": return r(1600, 3100);
+    case "allin": return r(1800, 3300);
+    default: return r(1000, 2200);
+  }
+}
+
 /* ============================================================
    牌库 / 牌型评估（移植自已验证的单机版）
    ============================================================ */
@@ -366,7 +379,7 @@ class Table {
     this.searchStart = first;
     this.toAct = -1;
     this.onUpdate();
-    setTimeout(() => this.continueAction(), 600);
+    setTimeout(() => this.continueAction(), 1000);
     return true;
   }
 
@@ -447,10 +460,10 @@ class Table {
 
     const p = this.players[next];
     if (p.isAI) {
+      const d = this.aiDecide(p);
       this._timer = setTimeout(() => {
-        const d = this.aiDecide(p);
         this.doAct(next, d.action, d.amount);
-      }, 700 + Math.random() * 900);
+      }, aiThinkDelay(d.action));
     } else if (!p.connected) {
       this._timer = setTimeout(() => {
         const toCall = this.currentBet - p.bet;
@@ -544,7 +557,7 @@ class Table {
   endBettingRound() {
     this._refundUncalled();
     this.onUpdate();
-    setTimeout(() => this.nextStage(), 500);
+    setTimeout(() => this.nextStage(), 750);
   }
   _refundUncalled() {
     const live = this.players.filter((p) => p.bet > 0);
@@ -604,7 +617,7 @@ class Table {
     this.lastRaiseSize = this.bigBlind;
     this.searchStart = this.nextPlayingIndex(this.button);
     this.onUpdate();
-    setTimeout(() => this.continueAction(), 600);
+    setTimeout(() => this.continueAction(), 1000);
   }
 
   /* ---------- 结算 ---------- */
