@@ -395,10 +395,15 @@
       b.addEventListener("click", () => setRaise(quickTarget(b.dataset.olmult)))
     );
     $("#ol-raise-slider").addEventListener("input", (e) => setRaise(Number(e.target.value)));
-    $("#ol-raise-input").addEventListener("input", (e) => setRaise(Number(e.target.value)));
+    $("#ol-rp-minus").addEventListener("click", () =>
+      setRaise(Number($("#ol-raise-slider").value) - ((lastState && lastState.bigBlind) || 20))
+    );
+    $("#ol-rp-plus").addEventListener("click", () =>
+      setRaise(Number($("#ol-raise-slider").value) + ((lastState && lastState.bigBlind) || 20))
+    );
     $("#ol-raise-confirm").addEventListener("click", () => {
       if (!lastState || !lastState.yourTurn) return;
-      const v = Number($("#ol-raise-input").value);
+      const v = Number($("#ol-raise-slider").value);
       const max = lastState.options.maxRaiseTo;
       if (v >= max) sendWS({ type: "action", action: "allin", amount: 0 });
       else sendWS({ type: "action", action: "raise", amount: v });
@@ -460,9 +465,15 @@
     if (!opt) return;
     $("#ol-action-row").classList.add("hidden");
     $("#ol-raise-row").classList.remove("hidden");
+    $("#ol-rp-pot").textContent = opt.pot;
+    $("#ol-rp-call").textContent = Math.max(0, opt.toCall);
+    $("#ol-rp-range").textContent = opt.minRaiseTo + "–" + opt.maxRaiseTo;
+    $("#ol-rp-min").textContent = opt.minRaiseTo;
+    $("#ol-rp-max").textContent = opt.maxRaiseTo;
     const slider = $("#ol-raise-slider");
     slider.min = opt.minRaiseTo;
     slider.max = opt.maxRaiseTo;
+    slider.step = lastState.smallBlind || 10;
     setRaise(opt.minRaiseTo);
   }
   function setRaise(v) {
@@ -470,7 +481,8 @@
     if (!opt) return;
     v = clamp(Math.round(v), opt.minRaiseTo, opt.maxRaiseTo);
     $("#ol-raise-slider").value = v;
-    $("#ol-raise-input").value = v;
+    $("#ol-rp-value").textContent = v;
+    $("#ol-rp-confirm-amt").textContent = v;
   }
   function quickTarget(mult) {
     const opt = lastState.options;

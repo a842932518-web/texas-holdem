@@ -43,12 +43,12 @@ const rankLabel = (r) =>
 function aiThinkDelay(action) {
   const r = (lo, hi) => lo + Math.random() * (hi - lo);
   switch (action) {
-    case "check": return r(900, 2000);
-    case "call": return r(1100, 2300);
-    case "fold": return r(900, 1900);
-    case "raise": return r(1600, 3100);
-    case "allin": return r(1800, 3300);
-    default: return r(1000, 2200);
+    case "check": return r(1300, 2600);
+    case "call": return r(1500, 2900);
+    case "fold": return r(1200, 2400);
+    case "raise": return r(2000, 3800);
+    case "allin": return r(2200, 4000);
+    default: return r(1400, 2800);
   }
 }
 const potTotal = () => G.players.reduce((s, p) => s + p.totalBet, 0);
@@ -980,17 +980,19 @@ function openRaisePanel() {
   const human = G.players[0];
   const minTo = Math.min(G.currentBet + G.lastRaiseSize, human.bet + human.stack);
   const maxTo = human.bet + human.stack;
+  const toCall = G.currentBet - human.bet;
   $("#action-row").classList.add("hidden");
   $("#raise-row").classList.remove("hidden");
-
+  $("#rp-pot").textContent = potTotal();
+  $("#rp-call").textContent = Math.max(0, toCall);
+  $("#rp-range").textContent = minTo + "–" + maxTo;
+  $("#rp-min").textContent = minTo;
+  $("#rp-max").textContent = maxTo;
   const slider = $("#raise-slider");
-  const input = $("#raise-input");
   slider.min = minTo;
   slider.max = maxTo;
-  slider.value = minTo;
-  input.value = minTo;
-  input.min = minTo;
-  input.max = maxTo;
+  slider.step = G.smallBlind;
+  setRaiseValue(minTo);
 }
 
 function setRaiseValue(v) {
@@ -999,7 +1001,8 @@ function setRaiseValue(v) {
   const maxTo = human.bet + human.stack;
   v = clamp(Math.round(v), minTo, maxTo);
   $("#raise-slider").value = v;
-  $("#raise-input").value = v;
+  $("#rp-value").textContent = v;
+  $("#rp-confirm-amt").textContent = v;
 }
 
 function quickRaiseTarget(mult) {
@@ -1030,20 +1033,21 @@ function bindEvents() {
     actAndAdvance(0, action, 0);
   });
 
-  $("#raise-slider").addEventListener("input", (e) =>
-    setRaiseValue(Number(e.target.value))
+  $("#raise-slider").addEventListener("input", (e) => setRaiseValue(Number(e.target.value)));
+  $("#rp-minus").addEventListener("click", () =>
+    setRaiseValue(Number($("#raise-slider").value) - G.bigBlind)
   );
-  $("#raise-input").addEventListener("input", (e) =>
-    setRaiseValue(Number(e.target.value))
+  $("#rp-plus").addEventListener("click", () =>
+    setRaiseValue(Number($("#raise-slider").value) + G.bigBlind)
   );
-  $(".raise-quick").addEventListener("click", (e) => {
+  $("#raise-row").addEventListener("click", (e) => {
     const b = e.target.closest(".quick-bet");
     if (!b) return;
     setRaiseValue(quickRaiseTarget(b.dataset.mult));
   });
   $("#raise-confirm").addEventListener("click", () => {
     if (G.toAct !== 0) return;
-    const target = Number($("#raise-input").value);
+    const target = Number($("#raise-slider").value);
     const maxTo = G.players[0].bet + G.players[0].stack;
     if (target >= maxTo) actAndAdvance(0, "allin", 0);
     else actAndAdvance(0, "raise", target);

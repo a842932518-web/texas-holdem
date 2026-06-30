@@ -279,9 +279,46 @@ html, body {
   border-top: 1px solid rgba(240,193,75,0.18); min-height: 78px;
   display: flex; align-items: center; justify-content: center;
 }
-#action-row, #raise-row, #next-row { display: flex; gap: 12px; align-items: center; }
-#raise-row { flex-direction: column; gap: 10px; width: 100%; max-width: 720px; }
-.raise-quick { display: flex; gap: 8px; }
+#action-row, #next-row { display: flex; gap: 12px; align-items: center; }
+
+/* ===== 加注面板（统一金色赌场风格） ===== */
+.raise-panel {
+  display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 560px;
+  padding: 14px 18px; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(31,42,53,0.96), rgba(13,20,26,0.96));
+  border: 1px solid rgba(240,193,75,0.35);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.55);
+}
+.rp-info { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.rp-chip {
+  font-size: 12px; color: var(--txt-dim); background: rgba(0,0,0,0.35);
+  padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+}
+.rp-chip b { color: var(--gold); }
+.rp-chip.range b { color: #7fd0ff; }
+.rp-main { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.rp-step {
+  width: 44px; height: 44px; border-radius: 12px; cursor: pointer; flex-shrink: 0;
+  background: linear-gradient(180deg, #2a3a48, #1a2630); color: var(--gold);
+  border: 1px solid rgba(240,193,75,0.4); font-size: 24px; font-weight: 700; line-height: 1;
+  display: flex; align-items: center; justify-content: center; transition: .12s;
+}
+.rp-step:hover { background: linear-gradient(180deg, #34485a, #223240); }
+.rp-step:active { transform: translateY(2px); }
+.rp-amount {
+  min-width: 150px; background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(240,193,75,0.45); border-radius: 12px; padding: 5px 18px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.rp-amount-label { font-size: 11px; color: var(--txt-dim); letter-spacing: 1px; }
+.rp-amount-val { font-size: 28px; font-weight: 800; color: var(--gold); line-height: 1.15; }
+.rp-amount-val::before { content: "🪙 "; font-size: 15px; }
+.rp-slider-wrap { width: 100%; }
+.rp-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--txt-dim); margin-top: 3px; padding: 0 2px; }
+.rp-quick { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.quick-bet.allin-q { color: #ff9a8a; border-color: rgba(216,65,59,0.5); background: rgba(216,65,59,0.14); }
+.quick-bet.allin-q:hover { background: rgba(216,65,59,0.28); }
+.rp-actions { display: flex; gap: 12px; }
 
 .act-btn {
   min-width: 110px; padding: 13px 18px; border: none; border-radius: 10px;
@@ -302,20 +339,19 @@ html, body {
   transition: .12s;
 }
 .quick-bet:hover { background: rgba(240,193,75,0.25); }
-.raise-slider-wrap { display: flex; align-items: center; gap: 14px; width: 100%; }
-#raise-slider { flex: 1; accent-color: var(--gold); height: 6px; cursor: pointer; }
-.raise-amount-box {
-  display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--txt-dim);
+.rp-slider { width: 100%; height: 14px; accent-color: var(--gold); cursor: pointer; }
+.rp-cancel {
+  flex: 1; padding: 13px; border-radius: 11px; cursor: pointer; font-weight: 700; font-size: 14px;
+  background: rgba(255,255,255,0.08); color: var(--txt); border: 1px solid rgba(255,255,255,0.15);
 }
-#raise-input {
-  width: 100px; padding: 8px; border-radius: 8px; border: 1px solid rgba(240,193,75,0.4);
-  background: rgba(0,0,0,0.4); color: var(--gold); font-weight: 700; font-size: 15px; text-align: center;
+.rp-cancel:hover { background: rgba(255,255,255,0.15); }
+.rp-confirm {
+  flex: 2.4; padding: 13px; border: none; border-radius: 11px; cursor: pointer; font-weight: 800; font-size: 15px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-deep)); color: #3a2a00; letter-spacing: 1px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
 }
-#raise-confirm {
-  padding: 10px 22px; border: none; border-radius: 9px; cursor: pointer; font-weight: 800; font-size: 14px;
-  background: linear-gradient(180deg, var(--green-btn), var(--green-d)); color: #fff;
-}
-#raise-cancel { padding: 9px 16px; }
+.rp-confirm:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+.rp-confirm b { font-size: 16px; }
 
 .primary-btn {
   padding: 13px 30px; border: none; border-radius: 10px; cursor: pointer;
@@ -533,12 +569,13 @@ html, body {
   #action-row, #ol-action-row { width: 100%; gap: 6px; }
   .act-btn { min-width: 0; flex: 1; padding: 14px 2px; font-size: 14px; letter-spacing: 0; border-radius: 9px; }
   .act-btn .amt { font-size: 10px; }
-  #raise-row, #ol-raise-row { width: 100%; gap: 8px; }
-  .raise-quick { flex-wrap: wrap; justify-content: center; gap: 6px; }
-  .quick-bet { padding: 9px 12px; font-size: 13px; }
-  .raise-slider-wrap { flex-wrap: wrap; gap: 10px; }
-  #raise-slider, #ol-raise-slider { flex: 1 1 100%; height: 26px; }
-  #raise-input, #ol-raise-input { width: 90px; }
+  .raise-panel { gap: 10px; padding: 12px; }
+  .rp-amount { min-width: 128px; }
+  .rp-amount-val { font-size: 24px; }
+  .rp-step { width: 42px; height: 42px; }
+  .rp-slider { height: 22px; }
+  .rp-quick { gap: 6px; }
+  .quick-bet { padding: 9px 8px; font-size: 12px; flex: 1; min-width: 54px; }
   #next-row .primary-btn { width: 100%; }
 
   /* 侧栏 → 右侧滑出抽屉 */

@@ -20,12 +20,12 @@ const rankLabel = (r) =>
 function aiThinkDelay(action) {
   const r = (lo, hi) => lo + Math.random() * (hi - lo);
   switch (action) {
-    case "check": return r(900, 2000);
-    case "call": return r(1100, 2300);
-    case "fold": return r(900, 1900);
-    case "raise": return r(1600, 3100);
-    case "allin": return r(1800, 3300);
-    default: return r(1000, 2200);
+    case "check": return r(1300, 2600);
+    case "call": return r(1500, 2900);
+    case "fold": return r(1200, 2400);
+    case "raise": return r(2000, 3800);
+    case "allin": return r(2200, 4000);
+    default: return r(1400, 2800);
   }
 }
 

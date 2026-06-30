@@ -87,22 +87,34 @@
         <button class="act-btn allin" data-action="allin">全下</button>
       </div>
 
-      <div id="raise-row" class="hidden">
-        <div class="raise-quick">
+      <div id="raise-row" class="raise-panel hidden">
+        <div class="rp-info">
+          <span class="rp-chip">底池 <b id="rp-pot">0</b></span>
+          <span class="rp-chip">需跟 <b id="rp-call">0</b></span>
+          <span class="rp-chip range">范围 <b id="rp-range">0–0</b></span>
+        </div>
+        <div class="rp-main">
+          <button class="rp-step" id="rp-minus" type="button">−</button>
+          <div class="rp-amount">
+            <span class="rp-amount-label">加注到</span>
+            <span class="rp-amount-val" id="rp-value">0</span>
+          </div>
+          <button class="rp-step" id="rp-plus" type="button">+</button>
+        </div>
+        <div class="rp-slider-wrap">
+          <input type="range" id="raise-slider" class="rp-slider" min="0" max="100" value="0" />
+          <div class="rp-ends"><span id="rp-min">0</span><span id="rp-max">0</span></div>
+        </div>
+        <div class="rp-quick">
           <button class="quick-bet" data-mult="pot33">⅓ 池</button>
           <button class="quick-bet" data-mult="pot50">½ 池</button>
           <button class="quick-bet" data-mult="pot75">¾ 池</button>
           <button class="quick-bet" data-mult="pot100">满池</button>
-          <button class="quick-bet" data-mult="max">最大</button>
+          <button class="quick-bet allin-q" data-mult="max">全下</button>
         </div>
-        <div class="raise-slider-wrap">
-          <input type="range" id="raise-slider" min="0" max="100" value="0" />
-          <div class="raise-amount-box">
-            <span>加注到</span>
-            <input type="number" id="raise-input" value="0" />
-          </div>
-          <button id="raise-confirm">确认</button>
-          <button id="raise-cancel" class="ghost-btn">取消</button>
+        <div class="rp-actions">
+          <button id="raise-cancel" class="rp-cancel" type="button">取消</button>
+          <button id="raise-confirm" class="rp-confirm" type="button">加注到 <b id="rp-confirm-amt">0</b></button>
         </div>
       </div>
 
@@ -118,22 +130,34 @@
         <button class="act-btn raise" data-ol="raise">加注</button>
         <button class="act-btn allin" data-ol="allin">全下</button>
       </div>
-      <div id="ol-raise-row" class="hidden">
-        <div class="raise-quick">
+      <div id="ol-raise-row" class="raise-panel hidden">
+        <div class="rp-info">
+          <span class="rp-chip">底池 <b id="ol-rp-pot">0</b></span>
+          <span class="rp-chip">需跟 <b id="ol-rp-call">0</b></span>
+          <span class="rp-chip range">范围 <b id="ol-rp-range">0–0</b></span>
+        </div>
+        <div class="rp-main">
+          <button class="rp-step" id="ol-rp-minus" type="button">−</button>
+          <div class="rp-amount">
+            <span class="rp-amount-label">加注到</span>
+            <span class="rp-amount-val" id="ol-rp-value">0</span>
+          </div>
+          <button class="rp-step" id="ol-rp-plus" type="button">+</button>
+        </div>
+        <div class="rp-slider-wrap">
+          <input type="range" id="ol-raise-slider" class="rp-slider" min="0" max="100" value="0" />
+          <div class="rp-ends"><span id="ol-rp-min">0</span><span id="ol-rp-max">0</span></div>
+        </div>
+        <div class="rp-quick">
           <button class="quick-bet" data-olmult="pot33">⅓ 池</button>
           <button class="quick-bet" data-olmult="pot50">½ 池</button>
           <button class="quick-bet" data-olmult="pot75">¾ 池</button>
           <button class="quick-bet" data-olmult="pot100">满池</button>
-          <button class="quick-bet" data-olmult="max">最大</button>
+          <button class="quick-bet allin-q" data-olmult="max">全下</button>
         </div>
-        <div class="raise-slider-wrap">
-          <input type="range" id="ol-raise-slider" min="0" max="100" value="0" />
-          <div class="raise-amount-box">
-            <span>加注到</span>
-            <input type="number" id="ol-raise-input" value="0" />
-          </div>
-          <button id="ol-raise-confirm">确认</button>
-          <button id="ol-raise-cancel" class="ghost-btn">取消</button>
+        <div class="rp-actions">
+          <button id="ol-raise-cancel" class="rp-cancel" type="button">取消</button>
+          <button id="ol-raise-confirm" class="rp-confirm" type="button">加注到 <b id="ol-rp-confirm-amt">0</b></button>
         </div>
       </div>
       <div id="ol-wait-turn" class="hidden ol-wait-turn"></div>
