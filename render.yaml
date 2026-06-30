@@ -1,0 +1,12 @@
+# Render 一键部署蓝图（Blueprint）
+# 用法：把本项目推到 GitHub → 在 https://render.com 新建 Blueprint 并选择该仓库
+# Render 会自动读取本文件创建一个支持 WebSocket 的免费 Web 服务
+services:
+  - type: web
+    name: texas-holdem-poker
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /
+    autoDeploy: true

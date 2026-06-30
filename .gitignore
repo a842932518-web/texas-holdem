@@ -1,0 +1,13 @@
+node_modules/
+android/
+ios/
+.gradle/
+*.apk
+*.aab
+*.keystore
+.DS_Store
+npm-debug.log*
+# 本地安装的工具链（若装在项目内）
+jdk/
+android-sdk/
+tools/

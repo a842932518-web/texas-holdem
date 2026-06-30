@@ -1,0 +1,9 @@
+{
+  "appId": "com.poker.texas",
+  "appName": "德州扑克",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
+}
